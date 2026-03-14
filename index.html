@@ -143,6 +143,7 @@ cursor:pointer;
 <button class="pack" onclick="addPack()">Pack Aç</button>
 <button class="undo" onclick="undoPack()">Undo</button>
 <button class="legend" onclick="legendary()">Legendary</button>
+<button onclick="saveSession()">Save Session</button>
 
 </div>
 
@@ -321,6 +322,14 @@ currentStreak: currentStreak
 });
 
 loadHistory();
+
+}
+
+async function saveSession(){
+
+await save();
+
+alert("Session saved");
 
 }
 
