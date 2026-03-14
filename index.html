@@ -82,6 +82,7 @@ button {
 </select>
 
 <input id="expansion" placeholder="Expansion name">
+<input type="date" id="date">
 
 <button onclick="startOpening()">New Opening</button>
 <button onclick="continueOpening()">Continue Opening</button>
@@ -163,6 +164,7 @@ document.getElementById("sessionTitle").innerText=
 document.getElementById("player").value+
 " - "+
 document.getElementById("expansion").value;
+const date=document.getElementById("date").value;
 }
 
 async function continueOpening(){
