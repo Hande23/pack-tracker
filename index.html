@@ -116,6 +116,11 @@ cursor:pointer;
 </div>
 
 <div id="continuePanel" style="display:none">
+<select id="continuePlayer">
+<option>Birand</option>
+<option>Hande</option>
+</select>
+<br><br>
 
 <br>
 
@@ -230,13 +235,14 @@ loadExpansions();
 async function continueOpening(){
 
 const expansion=document.getElementById("expansionSelect").value;
+const player=document.getElementById("continuePlayer").value;
 
 const snapshot=await getDocs(collection(db,"sessions"));
 
 snapshot.forEach(docu=>{
 const d=docu.data();
 
-if(d.expansion===expansion){
+if(d.expansion===expansion && d.player===player){
 
 currentDoc=docu.id;
 
@@ -284,7 +290,7 @@ await save();
 }
 
 async function legendary(){
-
+if(!confirm("Legendary geldi mi?")) return;
 hits.push(currentStreak);
 
 if(openingPacks===0){
@@ -354,14 +360,14 @@ content.className="historyContent";
 
 groups[key].forEach(d=>{
 
-const hitsSum=d.hits.reduce((a,b)=>a+b,0);
+const hitsSum=(d.hits||[]).reduce((a,b)=>a+b,0);
 const total=hitsSum+(d.currentStreak||0);
 
 const openingLegend=d.openingHits.length;
-const openingAvg=(hitsSum/openingLegend||0).toFixed(1);
+const openingAvg = openingLegend ? (hitsSum / openingLegend).toFixed(1) : "-";
 
 const totalLegend=d.hits.length;
-const totalAvg=(total/totalLegend||0).toFixed(1);
+const totalAvg = totalLegend ? (total / totalLegend).toFixed(1) : "-";
 
 const block=document.createElement("div");
 
