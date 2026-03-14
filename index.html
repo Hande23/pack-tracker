@@ -77,11 +77,11 @@ button {
 <h2>New Session</h2>
 
 <select id="player">
-<option>Hande</option>
 <option>Birand</option>
+<option>Hande</option>
 </select>
 
-<input id="expansion" placeholder="Expansion name">
+<select id="expansion"></select>
 <input type="date" id="date">
 
 <button onclick="startOpening()">New Opening</button>
@@ -121,6 +121,7 @@ Legendary geldi mi?
 <script type="module">
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { deleteDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 import {
 getFirestore,
 collection,
@@ -198,10 +199,11 @@ updateCounter();
 
 }
 
-function addPack(){
+async function addPack(){
 totalPacks++;
 streak++;
 updateCounter();
+await saveSession();
 }
 
 function undoPack(){
@@ -238,6 +240,31 @@ updateCounter();
 document.getElementById("legendPopup").style.display="none";
 
 await saveSession();
+}
+
+async function deleteExpansion(id){
+await deleteDoc(doc(db,"sessions",id));
+loadHistory();
+}
+
+async function loadExpansions(){
+
+const select=document.getElementById("expansion");
+
+select.innerHTML="";
+
+const querySnapshot=await getDocs(collection(db,"sessions"));
+
+querySnapshot.forEach((docu)=>{
+const d=docu.data();
+
+const opt=document.createElement("option");
+opt.value=d.expansion;
+opt.text=d.expansion;
+
+select.appendChild(opt);
+});
+
 }
 
 async function saveSession(){
@@ -283,7 +310,7 @@ const d=docu.data();
 const div=document.createElement("div");
 div.className="history-expansion";
 
-div.innerText=d.expansion+" ▼";
+div.innerHTML = d.expansion + " ▼ <button onclick=\"deleteExpansion('"+docu.id+"')\">🗑</button>";
 
 const content=document.createElement("div");
 content.className="history-content";
@@ -325,6 +352,7 @@ history.appendChild(content);
 }
 
 loadHistory();
+loadExpansions();
 
 window.startOpening = startOpening;
 window.continueOpening = continueOpening;
