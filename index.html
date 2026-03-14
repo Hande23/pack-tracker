@@ -290,7 +290,6 @@ await save();
 }
 
 async function legendary(){
-if(!confirm("Legendary geldi mi?")) return;
 hits.push(currentStreak);
 
 if(openingPacks===0){
@@ -341,7 +340,7 @@ data.sort((a,b)=>new Date(b.date)-new Date(a.date));
 let groups={};
 
 data.forEach(d=>{
-const key=d.expansion+" ("+d.date+")";
+const key = d.date ? d.expansion + " (" + d.date + ")" : d.expansion;
 
 if(!groups[key]) groups[key]=[];
 
@@ -360,7 +359,7 @@ content.className="historyContent";
 
 groups[key].forEach(d=>{
 
-const hitsSum=(d.hits||[]).reduce((a,b)=>a+b,0);
+const hitsSum=(d.hits || []).reduce((a,b)=>a+b,0);
 const total=hitsSum+(d.currentStreak||0);
 
 const openingLegend=d.openingHits.length;
@@ -392,7 +391,7 @@ Current streak<br>
 ${d.currentStreak||0} pack<br><br>
 
 Hits<br>
-${d.hits.join(",")}
+${(d.hits || []).join(",")}
 
 <hr>
 `;
