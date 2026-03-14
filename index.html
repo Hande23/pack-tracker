@@ -204,7 +204,7 @@ async function startOpening(){
 
 const date=document.getElementById("dateInput").value;
 
-if(!date){
+if(date === "" || date === null){
 alert("Please select a date first");
 return;
 }
@@ -290,6 +290,7 @@ updateCounter();
 }
 
 async function legendary(){
+
 hits.push(currentStreak);
 
 if(openingPacks===0){
@@ -301,7 +302,6 @@ currentStreak=0;
 updateCounter();
 
 await save();
-
 }
 
 function updateCounter(){
@@ -317,7 +317,7 @@ if(!currentDoc) return;
 await updateDoc(doc(db,"sessions",currentDoc),{
 hits,
 openingHits,
-currentStreak
+currentStreak: currentStreak
 });
 
 loadHistory();
