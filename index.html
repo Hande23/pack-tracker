@@ -229,8 +229,7 @@ document.getElementById("legendPopup").style.display="none";
 async function confirmLegend(){
 
 hits.push(streak);
-
-if(openingPacks===0){
+if(totalPacks <= openingPacks || openingPacks === 0){
 openingHits.push(streak);
 }
 
