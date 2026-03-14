@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Hearthstone Pack Tracker</title>
+
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#1e2a38">
+
+<link rel="apple-touch-icon" href="icon.png">
+
+<style>
+
+body{
+background:linear-gradient(#1e2a38,#243447);
+font-family:Arial;
+color:white;
+text-align:center;
+margin:0;
+}
+
+.container{
+max-width:500px;
+margin:auto;
+padding:20px;
+}
+
+.card{
+background:#2f3e4e;
+padding:20px;
+border-radius:12px;
+margin-bottom:20px;
+}
+
+button{
+padding:12px 18px;
+border:none;
+border-radius:10px;
+margin:6px;
+font-size:16px;
+cursor:pointer;
+}
+
+.pack{background:#d4af37;color:black}
+.legend{background:#8e44ad;color:white}
+.undo{background:#7f8c8d;color:white}
+
+.counter{
+font-size:60px;
+color:#f5d76e;
+margin:20px 0;
+}
+
+.historyHeader{
+background:#34495e;
+padding:10px;
+border-radius:10px;
+margin-top:10px;
+cursor:pointer;
+}
+
+.historyContent{
+display:none;
+background:#2f3e4e;
+padding:10px;
+border-radius:10px;
+}
+
+.playerTitle{
+display:flex;
+justify-content:space-between;
+font-weight:bold;
+margin-top:10px;
+}
+
+.delete{
+cursor:pointer;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="card">
+
+<button onclick="showNew()">New Opening</button>
+<button onclick="showContinue()">Continue Opening</button>
+
+<div id="newPanel" style="display:none">
+
+<br>
+
+<select id="player">
+<option>Birand</option>
+<option>Hande</option>
+</select>
+
+<br><br>
+
+<input id="expansionInput" placeholder="Expansion">
+
+<br><br>
+
+<input type="date" id="dateInput">
+
+<br><br>
+
+<button onclick="startOpening()">Start</button>
+
+</div>
+
+<div id="continuePanel" style="display:none">
+
+<br>
+
+<select id="expansionSelect"></select>
+
+<br><br>
+
+<button onclick="continueOpening()">Continue</button>
+
+</div>
+
+</div>
+
+<div id="sessionCard" class="card" style="display:none">
+
+<h3 id="sessionTitle"></h3>
+
+<div class="counter" id="counter">0</div>
+
+<button class="pack" onclick="addPack()">Pack Aç</button>
+<button class="undo" onclick="undoPack()">Undo</button>
+<button class="legend" onclick="legendary()">Legendary</button>
+
+</div>
+
+<div class="card">
+
+<h3>History</h3>
+
+<div id="history"></div>
+
+</div>
+
+</div>
+
+<script type="module">
+
+import {initializeApp} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+
+import {
+getFirestore,
+collection,
+addDoc,
+getDocs,
+updateDoc,
+doc,
+deleteDoc
+} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+const firebaseConfig={
+apiKey:"AIzaSyC6kVp7UC2SzYzv4oRY1n9u42O1O86031w",
+authDomain:"hearthstone-pack-tracker-33dbf.firebaseapp.com",
+projectId:"hearthstone-pack-tracker-33dbf",
+storageBucket:"hearthstone-pack-tracker-33dbf.firebasestorage.app",
+messagingSenderId:"76467697999",
+appId:"1:76467697999:web:72f24b7d4fbf2c0d12ad3a"
+};
+
+const app=initializeApp(firebaseConfig);
+const db=getFirestore(app);
+
+let totalPacks=0;
+let currentStreak=0;
+let hits=[];
+let openingHits=[];
+let openingPacks=0;
+
+let currentDoc=null;
+
+function showNew(){
+document.getElementById("newPanel").style.display="block";
+document.getElementById("continuePanel").style.display="none";
+}
+
+function showContinue(){
+document.getElementById("continuePanel").style.display="block";
+document.getElementById("newPanel").style.display="none";
+}
+
+async function startOpening(){
+
+totalPacks=0;
+currentStreak=0;
+hits=[];
+openingHits=[];
+openingPacks=0;
+
+const player=document.getElementById("player").value;
+const expansion=document.getElementById("expansionInput").value;
+const date=document.getElementById("dateInput").value;
+
+document.getElementById("sessionCard").style.display="block";
+
+document.getElementById("sessionTitle").innerText=
+player+" — "+expansion;
+
+const data={
+player,
+expansion,
+date,
+hits:[],
+openingHits:[],
+currentStreak:0
+};
+
+const ref=await addDoc(collection(db,"sessions"),data);
+currentDoc=ref.id;
+
+loadExpansions();
+}
+
+async function continueOpening(){
+
+const expansion=document.getElementById("expansionSelect").value;
+
+const snapshot=await getDocs(collection(db,"sessions"));
+
+snapshot.forEach(docu=>{
+const d=docu.data();
+
+if(d.expansion===expansion){
+
+currentDoc=docu.id;
+
+hits=d.hits||[];
+openingHits=d.openingHits||[];
+currentStreak=d.currentStreak||0;
+
+totalPacks=hits.reduce((a,b)=>a+b,0)+currentStreak;
+
+document.getElementById("sessionCard").style.display="block";
+document.getElementById("sessionTitle").innerText=d.player+" — "+d.expansion;
+
+updateCounter();
+
+}
+
+});
+
+}
+
+async function addPack(){
+
+totalPacks++;
+currentStreak++;
+
+updateCounter();
+
+await save();
+
+}
+
+async function undoPack(){
+
+if(currentStreak>0){
+
+currentStreak--;
+totalPacks--;
+
+updateCounter();
+
+await save();
+
+}
+
+}
+
+async function legendary(){
+
+hits.push(currentStreak);
+
+if(openingPacks===0){
+openingHits.push(currentStreak);
+}
+
+currentStreak=0;
+
+updateCounter();
+
+await save();
+
+}
+
+function updateCounter(){
+
+document.getElementById("counter").innerText=currentStreak;
+
+}
+
+async function save(){
+
+if(!currentDoc) return;
+
+await updateDoc(doc(db,"sessions",currentDoc),{
+hits,
+openingHits,
+currentStreak
+});
+
+loadHistory();
+
+}
+
+async function loadHistory(){
+
+const history=document.getElementById("history");
+history.innerHTML="";
+
+const snapshot=await getDocs(collection(db,"sessions"));
+
+let data=[];
+
+snapshot.forEach(d=>data.push({...d.data(),id:d.id}));
+
+data.sort((a,b)=>new Date(b.date)-new Date(a.date));
+
+let groups={};
+
+data.forEach(d=>{
+const key=d.expansion+" ("+d.date+")";
+
+if(!groups[key]) groups[key]=[];
+
+groups[key].push(d);
+
+});
+
+Object.keys(groups).forEach(key=>{
+
+const head=document.createElement("div");
+head.className="historyHeader";
+head.innerText=key+" ▼";
+
+const content=document.createElement("div");
+content.className="historyContent";
+
+groups[key].forEach(d=>{
+
+const hitsSum=d.hits.reduce((a,b)=>a+b,0);
+const total=hitsSum+(d.currentStreak||0);
+
+const openingLegend=d.openingHits.length;
+const openingAvg=(hitsSum/openingLegend||0).toFixed(1);
+
+const totalLegend=d.hits.length;
+const totalAvg=(total/totalLegend||0).toFixed(1);
+
+const block=document.createElement("div");
+
+block.innerHTML=`
+
+<div class="playerTitle">
+${d.player}
+<span class="delete" onclick="deletePlayer('${d.id}')">🗑️</span>
+</div>
+
+Opening<br>
+${hitsSum} pack<br>
+${openingLegend} legendary<br>
+${openingAvg} pack'te 1<br><br>
+
+Total<br>
+${total} pack<br>
+${totalLegend} legendary<br>
+${totalAvg} pack'te 1<br><br>
+
+Current streak<br>
+${d.currentStreak||0} pack<br><br>
+
+Hits<br>
+${d.hits.join(",")}
+
+<hr>
+`;
+
+content.appendChild(block);
+
+});
+
+head.onclick=()=>{
+
+content.style.display=
+content.style.display==="block"?"none":"block";
+
+};
+
+history.appendChild(head);
+history.appendChild(content);
+
+});
+
+}
+
+async function deletePlayer(id){
+
+await deleteDoc(doc(db,"sessions",id));
+
+loadHistory();
+loadExpansions();
+
+}
+
+async function loadExpansions(){
+
+const select=document.getElementById("expansionSelect");
+
+select.innerHTML="";
+
+const snapshot=await getDocs(collection(db,"sessions"));
+
+let expansions=[];
+
+snapshot.forEach(doc=>{
+const d=doc.data();
+expansions.push(d.expansion);
+});
+
+expansions=[...new Set(expansions)];
+
+expansions.reverse();
+
+expansions.forEach(e=>{
+const opt=document.createElement("option");
+opt.value=e;
+opt.text=e;
+select.appendChild(opt);
+});
+
+}
+
+loadHistory();
+loadExpansions();
+
+window.startOpening=startOpening;
+window.continueOpening=continueOpening;
+window.addPack=addPack;
+window.undoPack=undoPack;
+window.legendary=legendary;
+window.deletePlayer=deletePlayer;
+window.showNew=showNew;
+window.showContinue=showContinue;
+
+</script>
+
+</body>
+</html>
