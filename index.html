@@ -270,7 +270,7 @@ currentStreak++;
 
 updateCounter();
 
-await save();
+await save(false);
 
 }
 
@@ -310,7 +310,7 @@ document.getElementById("counter").innerText=currentStreak;
 
 }
 
-async function save(){
+async function save(refresh=true){
 
 if(!currentDoc) return;
 
@@ -360,7 +360,8 @@ content.className="historyContent";
 groups[key].forEach(d=>{
 
 const hitsSum=(d.hits || []).reduce((a,b)=>a+b,0);
-const total=hitsSum+(d.currentStreak||0);
+const current = d.currentStreak || 0;
+const total = hitsSum + current;
 
 const openingLegend=d.openingHits.length;
 const openingAvg = openingLegend ? (hitsSum / openingLegend).toFixed(1) : "-";
@@ -378,7 +379,7 @@ ${d.player}
 </div>
 
 Opening<br>
-${hitsSum} pack<br>
+${hitsSum + current} pack<br>
 ${openingLegend} legendary<br>
 ${openingAvg} pack'te 1<br><br>
 
