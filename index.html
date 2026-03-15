@@ -6,7 +6,7 @@
 <title>Hearthstone Pack Tracker</title>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
-<meta name="theme-color" content="#1a1208">
+<meta name="theme-color" content="#08111e">
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -19,16 +19,16 @@
   --gold-light:  #f0c93a;
   --gold-dark:   #8a6a10;
   --gold-shine:  #ffe580;
-  --bg-deep:     #0f0a04;
-  --bg-mid:      #1c1208;
-  --bg-card:     #221608;
-  --bg-card2:    #2a1e0c;
-  --bg-panel:    #1e1508;
-  --text:        #f0e6c8;
-  --text-dim:    #a89060;
-  --border:      rgba(201,162,39,0.3);
+  --bg-deep:     #08111e;
+  --bg-mid:      #0d1b2e;
+  --bg-card:     #112240;
+  --bg-card2:    #162b4e;
+  --bg-panel:    #0f1e35;
+  --text:        #e8f0f8;
+  --text-dim:    #7a9bbf;
+  --border:      rgba(201,162,39,0.28);
   --border-glow: rgba(201,162,39,0.6);
-  --shadow-gold: rgba(201,162,39,0.25);
+  --shadow-gold: rgba(201,162,39,0.2);
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -36,24 +36,11 @@
 body {
   background-color: var(--bg-deep);
   background-image:
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E"),
-    repeating-linear-gradient(
-      92deg,
-      transparent,
-      transparent 38px,
-      rgba(201,162,39,0.015) 38px,
-      rgba(201,162,39,0.015) 39px
-    ),
-    repeating-linear-gradient(
-      178deg,
-      transparent,
-      transparent 58px,
-      rgba(140,100,20,0.02) 58px,
-      rgba(140,100,20,0.02) 59px
-    ),
-    radial-gradient(ellipse at 20% 0%, rgba(90,55,10,0.45) 0%, transparent 60%),
-    radial-gradient(ellipse at 80% 100%, rgba(60,35,5,0.4) 0%, transparent 60%),
-    linear-gradient(170deg, #1a1005 0%, #0f0a04 40%, #100c06 100%);
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23noise)' opacity='0.035'/%3E%3C/svg%3E"),
+    radial-gradient(ellipse at 15% 10%, rgba(30,70,130,0.5) 0%, transparent 55%),
+    radial-gradient(ellipse at 85% 90%, rgba(15,45,90,0.45) 0%, transparent 55%),
+    radial-gradient(ellipse at 50% 50%, rgba(10,30,65,0.3) 0%, transparent 70%),
+    linear-gradient(160deg, #0c1828 0%, #08111e 45%, #0a1520 100%);
   font-family: 'Crimson Text', Georgia, serif;
   color: var(--text);
   text-align: center;
@@ -101,7 +88,7 @@ body {
 
 /* ── CARDS ── */
 .card {
-  background: linear-gradient(160deg, var(--bg-card2) 0%, var(--bg-card) 100%);
+  background: linear-gradient(160deg, #1e3558 0%, #162b4a 100%);
   border: 1px solid var(--border);
   border-radius: 14px;
   padding: 22px 20px;
@@ -360,15 +347,15 @@ select option { background: #1c1208; color: var(--text); }
   align-items: center;
   justify-content: space-between;
   padding: 11px 16px;
-  background: rgba(22,14,4,0.85);
+  background: rgba(14,28,52,0.9);
   border-radius: 0 0 10px 10px;
 }
 
 .historyName {
   font-family: 'Cinzel', serif;
-  font-size: 13px;
-  font-weight: 600;
-  letter-spacing: 1px;
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
   color: var(--text);
 }
 
@@ -390,7 +377,7 @@ select option { background: #1c1208; color: var(--text); }
 
 .historyContent {
   display: none;
-  background: rgba(15,10,3,0.7);
+  background: rgba(8,18,38,0.85);
   border: 1px solid var(--border);
   border-top: none;
   border-radius: 0 0 10px 10px;
@@ -425,7 +412,7 @@ select option { background: #1c1208; color: var(--text); }
 }
 
 .statBox {
-  background: rgba(201,162,39,0.06);
+  background: rgba(201,162,39,0.07);
   border: 1px solid rgba(201,162,39,0.12);
   border-radius: 7px;
   padding: 8px 10px;
@@ -500,7 +487,7 @@ select option { background: #1c1208; color: var(--text); }
 }
 
 .popupBox {
-  background: linear-gradient(160deg, var(--bg-card2), var(--bg-card));
+  background: linear-gradient(160deg, #1e3558, #162b4a);
   border: 1px solid var(--border);
   border-radius: 14px;
   padding: 28px 24px 22px;
@@ -910,13 +897,13 @@ async function loadHistory(){
             <div class="statBoxLabel">Opening</div>
             <div class="statBoxValue">${openingTotal||hitsSum}</div>
             <div class="statBoxSub">packs · ${openingLegend} legendary</div>
-            <div class="statBoxSub">${openingAvg} / legendary</div>
+            <div class="statBoxSub">${openingAvg !== '—' ? openingAvg + \" pack'te 1\" : '—'}</div>
           </div>
           <div class="statBox">
             <div class="statBoxLabel">Total</div>
             <div class="statBoxValue">${total}</div>
             <div class="statBoxSub">packs · ${totalLegend} legendary</div>
-            <div class="statBoxSub">${totalAvg} / legendary</div>
+            <div class="statBoxSub">${totalAvg !== '—' ? totalAvg + \" pack'te 1\" : '—'}</div>
           </div>
         </div>
         <div class="streakBadge">🔥 Streak: ${d.currentStreak||0}</div>
