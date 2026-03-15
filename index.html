@@ -51,6 +51,14 @@ border-radius:8px;
 margin:5px;
 }
 
+input{
+padding:10px;
+font-size:16px;
+border-radius:8px;
+margin:5px;
+width:200px;
+}
+
 .pack{background:#d4af37;color:black}
 .legend{background:#8e44ad;color:white}
 .undo{background:#7f8c8d;color:white}
@@ -200,8 +208,15 @@ let openingPacks=0;
 let currentDoc=null;
 
 function showNew(){
+
+document.getElementById("sessionCard").style.display="none";
+
 document.getElementById("newPanel").style.display="block";
 document.getElementById("continuePanel").style.display="none";
+
+document.getElementById("expansionInput").value="";
+document.getElementById("dateInput").value="";
+
 }
 
 function showContinue(){
@@ -226,6 +241,24 @@ openingPacks=0;
 
 const player=document.getElementById("player").value;
 const expansion=document.getElementById("expansionInput").value;
+
+const snapshot = await getDocs(collection(db,"sessions"));
+
+let exists = false;
+
+snapshot.forEach(docu=>{
+const d = docu.data();
+
+if(d.player === player && d.expansion === expansion && d.date === date){
+exists = true;
+}
+});
+
+if(exists){
+alert("This session already exists");
+return;
+}
+
 
 document.getElementById("sessionCard").style.display="block";
 
