@@ -327,9 +327,15 @@ loadHistory();
 
 async function saveSession(){
 
-await save();
+await updateDoc(doc(db,"sessions",currentDoc),{
+hits: hits,
+openingHits: openingHits,
+currentStreak: currentStreak
+});
 
-alert("Session saved");
+loadHistory();
+
+alert("Progress saved");
 
 }
 
