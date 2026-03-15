@@ -22,19 +22,6 @@ margin-bottom:25px;
 letter-spacing:2px;
 }
 
-.historyHeader{
-background:#34495e;
-padding:12px;
-border-radius:10px;
-margin-top:14px;
-font-size:18px;
-cursor:pointer;
-}
-
-.historyContent{
-margin-top:8px;
-}  
-
 body{
 background:linear-gradient(#1e2a38,#243447);
 font-family:Arial;
@@ -47,13 +34,6 @@ margin:0;
 max-width:500px;
 margin:auto;
 padding:20px;
-}
-
-.card{
-background:#2f3e4e;
-padding:20px;
-border-radius:12px;
-margin-bottom:20px;
 }
 
 button{
@@ -94,18 +74,30 @@ margin:20px 0;
 
 .Header{
 background:#34495e;
-padding:10px;
+padding:14px;
 border-radius:10px;
-margin-top:10px;
+margin-top:16px;
+font-size:18px;
 cursor:pointer;
+display:flex;
+justify-content:space-between;
+align-items:center;
 }
 
 .Content{
-display:none;
-background:#2f3e4e;
-padding:10px;
-border-radius:10px;
 margin-top:10px;
+}
+
+.Card{
+background:#2f3e4e;
+padding:12px;
+border-radius:10px;
+margin-bottom:10px;
+box-shadow:0 2px 6px rgba(0,0,0,0.3);
+}
+
+.arrow{
+transition:transform 0.2s;
 }
 
 .playerTitle{
@@ -481,7 +473,10 @@ Object.keys(groups).forEach(key=>{
 
 const head=document.createElement("div");
 head.className="historyHeader";
-head.innerText=key+" ▼";
+head.innerHTML = `
+<span>🎴 ${key}</span>
+<span class="arrow">▼</span>
+`;
 
 const content=document.createElement("div");
 content.className="historyContent";
@@ -507,6 +502,7 @@ const totalLegend=d.hits.length;
 const totalAvg = totalLegend ? (total / totalLegend).toFixed(1) : "-";
 
 const block=document.createElement("div");
+block.className="historyCard";
 
 block.innerHTML=`
 
@@ -540,8 +536,16 @@ content.appendChild(block);
 
 head.onclick=()=>{
 
-content.style.display=
-content.style.display==="block"?"none":"block";
+const arrow = head.querySelector(".arrow");
+
+if(content.style.display==="block"){
+content.style.display="none";
+arrow.style.transform="rotate(0deg)";
+}
+else{
+content.style.display="block";
+arrow.style.transform="rotate(180deg)";
+}
 
 };
 
