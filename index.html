@@ -378,11 +378,24 @@ async function saveSession(){
 
 if(!currentDoc) return;
 
+const snapshot = await getDocs(collection(db,"sessions"));
+
+let openingTotalValue = totalPacks;
+
+snapshot.forEach(docu=>{
+if(docu.id === currentDoc){
+const d = docu.data();
+if(d.openingTotal){
+openingTotalValue = d.openingTotal;
+}
+}
+});
+
 await updateDoc(doc(db,"sessions",currentDoc),{
 hits: hits,
 openingHits: openingHits,
 currentStreak: currentStreak,
-openingTotal: totalPacks
+openingTotal: openingTotalValue
 });
 
 loadHistory();
