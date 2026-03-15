@@ -44,6 +44,13 @@ font-size:16px;
 cursor:pointer;
 }
 
+select{
+padding:10px;
+font-size:16px;
+border-radius:8px;
+margin:5px;
+}
+
 .pack{background:#d4af37;color:black}
 .legend{background:#8e44ad;color:white}
 .undo{background:#7f8c8d;color:white}
@@ -141,7 +148,7 @@ cursor:pointer;
 
 <div class="counter" id="counter">0</div>
 
-<button class="pack" onclick="addPack()">Pack Aç</button>
+<button class="pack" onclick="addPack()">Open Pack</button>
 <button class="undo" onclick="undoPack()">Undo</button>
 <button class="legend" onclick="legendary()">Legendary</button>
 <button class="save" onclick="saveSession()">Save Progress</button>
@@ -435,6 +442,8 @@ history.appendChild(content);
 
 async function deletePlayer(id){
 
+if(!confirm("Are you sure you want to delete this session?")) return;
+
 await deleteDoc(doc(db,"sessions",id));
 
 loadHistory();
@@ -481,6 +490,7 @@ window.legendary=legendary;
 window.deletePlayer=deletePlayer;
 window.showNew=showNew;
 window.showContinue=showContinue;
+window.saveSession = saveSession;
 
 </script>
 
