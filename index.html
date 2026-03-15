@@ -132,13 +132,15 @@ cursor:pointer;
 </div>
 
 <div id="continuePanel" style="display:none">
+
+<br>
+
 <select id="continuePlayer">
 <option>Birand</option>
 <option>Hande</option>
 </select>
-<br><br>
 
-<br>
+<br><br>
 
 <select id="expansionSelect"></select>
 
@@ -208,6 +210,11 @@ let openingPacks=0;
 let currentDoc=null;
 
 function showNew(){
+
+totalPacks = 0;
+currentStreak = 0;
+
+document.getElementById("counter").innerText = 0;
 
 document.getElementById("sessionCard").style.display="none";
 
@@ -486,17 +493,22 @@ loadExpansions();
 
 async function loadExpansions(){
 
-const select=document.getElementById("expansionSelect");
+const player = document.getElementById("continuePlayer").value;
+const select = document.getElementById("expansionSelect");
 
 select.innerHTML="";
 
-const snapshot=await getDocs(collection(db,"sessions"));
+const snapshot = await getDocs(collection(db,"sessions"));
 
 let expansions=[];
 
 snapshot.forEach(doc=>{
-const d=doc.data();
+const d = doc.data();
+
+if(d.player === player){
 expansions.push(d.expansion);
+}
+
 });
 
 expansions=[...new Set(expansions)];
@@ -524,6 +536,7 @@ window.deletePlayer=deletePlayer;
 window.showNew=showNew;
 window.showContinue=showContinue;
 window.saveSession = saveSession;
+document.getElementById("continuePlayer").addEventListener("change",loadExpansions);
 
 </script>
 
