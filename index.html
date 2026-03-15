@@ -255,7 +255,7 @@ let exists = false;
 snapshot.forEach(docu=>{
 const d = docu.data();
 
-if(d.player === player && d.expansion === expansion){
+if(d.expansion === expansion){
 exists = true;
 }
 });
