@@ -47,6 +47,7 @@ cursor:pointer;
 .pack{background:#d4af37;color:black}
 .legend{background:#8e44ad;color:white}
 .undo{background:#7f8c8d;color:white}
+.save{background:#2ecc71;color:white}
 
 .counter{
 font-size:60px;
@@ -143,7 +144,7 @@ cursor:pointer;
 <button class="pack" onclick="addPack()">Pack Aç</button>
 <button class="undo" onclick="undoPack()">Undo</button>
 <button class="legend" onclick="legendary()">Legendary</button>
-<button class="undo" onclick="saveSession()">Save Progress</button>
+<button class="save" onclick="saveSession()">Save Progress</button>
 
 </div>
 
@@ -327,6 +328,8 @@ loadHistory();
 
 async function saveSession(){
 
+if(!currentDoc) return;
+
 await updateDoc(doc(db,"sessions",currentDoc),{
 hits: hits,
 openingHits: openingHits,
@@ -334,6 +337,7 @@ currentStreak: currentStreak
 });
 
 loadHistory();
+}
 
 alert("Progress saved");
 
