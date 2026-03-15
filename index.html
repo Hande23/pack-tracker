@@ -233,57 +233,64 @@ document.getElementById("newPanel").style.display="none";
 
 async function startOpening(){
 
-const date=document.getElementById("dateInput").value;
+const date = document.getElementById("dateInput").value;
 
 if(date === "" || date === null){
 alert("Please select a date first");
 return;
 }
 
-totalPacks=0;
-currentStreak=0;
-hits=[];
-openingHits=[];
-
-const player=document.getElementById("player").value;
-const expansion=document.getElementById("expansionInput").value;
+const player = document.getElementById("player").value;
+const expansion = document.getElementById("expansionInput").value;
 
 const snapshot = await getDocs(collection(db,"sessions"));
 
-let exists = false;
+let existsPlayer = false;
+let wrongDate = false;
 
 snapshot.forEach(docu=>{
 const d = docu.data();
 
-if(d.expansion === expansion){
-exists = true;
+if(d.expansion === expansion && d.date !== date){
+wrongDate = true;
 }
+
+if(d.player === player && d.expansion === expansion){
+existsPlayer = true;
+}
+
 });
 
-if(exists){
+if(wrongDate || existsPlayer){
 alert("This session already exists");
 return;
 }
 
+totalPacks = 0;
+currentStreak = 0;
+hits = [];
+openingHits = [];
+openingPacks = 0;
 
 document.getElementById("sessionCard").style.display="block";
 
-document.getElementById("sessionTitle").innerText=
-player+" — "+expansion;
+document.getElementById("sessionTitle").innerText =
+player + " — " + expansion;
 
-const data={
+const data = {
 player,
 expansion,
 date,
-hits:[],
-openingHits:[],
-currentStreak:0
+hits: [],
+openingHits: [],
+currentStreak: 0
 };
 
-const ref=await addDoc(collection(db,"sessions"),data);
-currentDoc=ref.id;
+const ref = await addDoc(collection(db,"sessions"),data);
+currentDoc = ref.id;
 
 loadExpansions();
+
 }
 
 async function continueOpening(){
