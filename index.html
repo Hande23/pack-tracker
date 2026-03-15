@@ -153,6 +153,7 @@ cursor:pointer;
 <br><br>
 
 <button onclick="startOpening()">Start</button>
+<button onclick="cancelOpening()">Cancel</button>
 
 </div>
 
@@ -172,6 +173,7 @@ cursor:pointer;
 <br><br>
 
 <button onclick="continueOpening()">Continue</button>
+<button onclick="cancelOpening()">Cancel</button>
 
 </div>
 
@@ -370,6 +372,14 @@ totalPacks--;
 updateCounter();
 
 }
+
+}
+
+function cancelOpening(){
+
+document.getElementById("newPanel").style.display="none";
+document.getElementById("continuePanel").style.display="none";
+document.getElementById("sessionCard").style.display="none";
 
 }
 
@@ -661,6 +671,7 @@ window.showContinue=showContinue;
 window.saveSession = saveSession;
 window.exportData = exportData;
 window.importData = importData;
+window.cancelOpening = cancelOpening;
 document.getElementById("continuePlayer").addEventListener("change",loadExpansions);
 
 </script>
