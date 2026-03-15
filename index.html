@@ -428,7 +428,7 @@ groups[key].forEach(d=>{
 
 const hitsSum=(d.hits || []).reduce((a,b)=>a+b,0);
 const current = d.currentStreak || 0;
-const total = (d.openingTotal || hitsSum) + current;
+const total = hitsSum + current;
 
 const openingLegend=d.openingHits.length;
 const openingAvg = openingLegend ? ((hitsSum + (d.currentStreak || 0)) / openingLegend).toFixed(1) : "-";
