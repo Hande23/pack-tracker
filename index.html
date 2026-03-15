@@ -161,7 +161,7 @@ cursor:pointer;
 
 <button class="pack" onclick="addPack()">Open Pack</button>
 <button class="undo" onclick="undoPack()">Undo</button>
-<button class="legendary" onclick="legendaryPopup()">Legendary</button>
+<button class="legend" onclick="legendaryPopup()">Legendary</button>
 <button class="save" onclick="saveSession()">Save Progress</button>
 
 </div>
@@ -206,7 +206,6 @@ let totalPacks=0;
 let currentStreak=0;
 let hits=[];
 let openingHits=[];
-let openingPacks=0;
 
 let currentDoc=null;
 
@@ -343,15 +342,12 @@ async function legendary(){
 
 hits.push(currentStreak);
 
-if(openingPacks===0){
 openingHits.push(currentStreak);
-}
 
 currentStreak=0;
 
 updateCounter();
 
-await save();
 }
 
 function legendaryPopup(){
@@ -366,7 +362,7 @@ document.getElementById("counter").innerText=currentStreak;
 
 }
 
-async function save(refresh=true){
+async function save(){
 
 if(!currentDoc) return;
 
@@ -536,7 +532,7 @@ let expansions=[];
 snapshot.forEach(doc=>{
 const d = doc.data();
 
-expansions.add(d.expansion);
+expansions.push(d.expansion);
 
 });
 
@@ -567,6 +563,7 @@ window.continueOpening=continueOpening;
 window.addPack=addPack;
 window.undoPack=undoPack;
 window.legendary=legendary;
+window.legendaryPopup=legendaryPopup;
 window.deletePlayer=deletePlayer;
 window.showNew=showNew;
 window.showContinue=showContinue;
