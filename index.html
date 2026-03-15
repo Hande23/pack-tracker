@@ -422,7 +422,7 @@ const current = d.currentStreak || 0;
 const total = hitsSum + current;
 
 const openingLegend=d.openingHits.length;
-const openingAvg = openingLegend ? (hitsSum / openingLegend).toFixed(1) : "-";
+const openingAvg = openingLegend ? ((hitsSum + (d.currentStreak || 0)) / openingLegend).toFixed(1) : "-";
 
 const totalLegend=d.hits.length;
 const totalAvg = totalLegend ? (total / totalLegend).toFixed(1) : "-";
