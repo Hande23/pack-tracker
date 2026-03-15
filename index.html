@@ -22,6 +22,24 @@ margin-bottom:25px;
 letter-spacing:2px;
 }
 
+.mainTitle{
+font-size:28px;
+font-weight:bold;
+color:#f5d76e;
+margin-bottom:25px;
+letter-spacing:2px;
+line-height:1.2;
+}
+
+.subTitle{
+font-size:22px;
+}
+
+.dateLabel{
+font-size:14px;
+opacity:0.8;
+}
+
 .historyHeader{
 background:#34495e;
 padding:12px;
@@ -169,7 +187,11 @@ cursor:pointer;
 
 <div class="container">
 
-<h1 class="mainTitle">HEARTHSTONE PACK TRACKER</h1>
+<h1 class="mainTitle">
+HEARTHSTONE
+<br>
+<span class="subTitle">PACK TRACKER</span>
+</h1>
 
 <div class="card">
 
@@ -192,6 +214,8 @@ cursor:pointer;
 
 <br><br>
 
+<label class="dateLabel">Date (mm/dd/yyyy)</label>
+<br>
 <input type="date" id="dateInput">
 
 <br><br>
