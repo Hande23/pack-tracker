@@ -119,7 +119,8 @@ cursor:pointer;
 
 <br><br>
 
-<input id="expansionInput" placeholder="Expansion">
+<input id="expansionInput" list="expansionList" placeholder="Expansion">
+<datalist id="expansionList"></datalist>
 
 <br><br>
 
@@ -380,7 +381,8 @@ if(!currentDoc) return;
 await updateDoc(doc(db,"sessions",currentDoc),{
 hits: hits,
 openingHits: openingHits,
-currentStreak: currentStreak
+currentStreak: currentStreak,
+openingTotal: totalPacks
 });
 
 loadHistory();
@@ -426,7 +428,7 @@ groups[key].forEach(d=>{
 
 const hitsSum=(d.hits || []).reduce((a,b)=>a+b,0);
 const current = d.currentStreak || 0;
-const total = hitsSum + current;
+const total = (d.openingTotal || hitsSum) + current;
 
 const openingLegend=d.openingHits.length;
 const openingAvg = openingLegend ? ((hitsSum + (d.currentStreak || 0)) / openingLegend).toFixed(1) : "-";
@@ -444,7 +446,7 @@ ${d.player}
 </div>
 
 Opening<br>
-${hitsSum + current} pack<br>
+${d.openingTotal || hitsSum} pack<br>
 ${openingLegend} legendary<br>
 ${openingAvg} pack'te 1<br><br>
 
@@ -493,6 +495,9 @@ loadExpansions();
 
 async function loadExpansions(){
 
+const dataList = document.getElementById("expansionList");
+dataList.innerHTML="";
+
 const player = document.getElementById("continuePlayer").value;
 const select = document.getElementById("expansionSelect");
 
@@ -520,6 +525,12 @@ const opt=document.createElement("option");
 opt.value=e;
 opt.text=e;
 select.appendChild(opt);
+});
+
+expansions.forEach(e=>{
+const opt=document.createElement("option");
+opt.value=e;
+dataList.appendChild(opt);
 });
 
 }
