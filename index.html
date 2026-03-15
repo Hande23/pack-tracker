@@ -70,7 +70,7 @@ color:#f5d76e;
 margin:20px 0;
 }
 
-.historyHeader{
+.Header{
 background:#34495e;
 padding:10px;
 border-radius:10px;
@@ -78,7 +78,7 @@ margin-top:10px;
 cursor:pointer;
 }
 
-.historyContent{
+.Content{
 display:none;
 background:#2f3e4e;
 padding:10px;
@@ -169,6 +169,10 @@ cursor:pointer;
 <div class="card">
 
 <h3>History</h3>
+
+<button onclick="exportData()">Export</button>
+<input type="file" id="importFile" style="display:none" onchange="importData(event)">
+<button onclick="document.getElementById('importFile').click()">Import</button>
 
 <div id="history"></div>
 
@@ -517,6 +521,61 @@ await deleteDoc(doc(db,"sessions",id));
 
 loadHistory();
 loadExpansions();
+
+}
+
+async function exportData(){
+
+const snapshot = await getDocs(collection(db,"sessions"));
+
+let data=[];
+
+snapshot.forEach(doc=>{
+data.push({...doc.data(), id:doc.id});
+});
+
+const blob = new Blob(
+[JSON.stringify(data,null,2)],
+{type:"application/json"}
+);
+
+const a=document.createElement("a");
+
+a.href=URL.createObjectURL(blob);
+a.download="packtracker_backup.json";
+
+a.click();
+
+}
+
+async function importData(event){
+
+const file = event.target.files[0];
+
+if(!file) return;
+
+const text = await file.text();
+
+const data = JSON.parse(text);
+
+for(const d of data){
+
+await addDoc(collection(db,"sessions"),{
+player:d.player,
+expansion:d.expansion,
+date:d.date,
+hits:d.hits||[],
+openingHits:d.openingHits||[],
+currentStreak:d.currentStreak||0,
+openingTotal:d.openingTotal||0
+});
+
+}
+
+loadHistory();
+loadExpansions();
+
+alert("Import completed");
 
 }
 
