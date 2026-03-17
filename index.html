@@ -879,7 +879,7 @@ async function loadHistory(){
       const current=d.currentStreak||0;
       const total=hitsSum+current;
       const openingLegend=d.openingHits.length;
-      const openingTotal=d.openingTotal||0;
+      const openingTotal = d.openingTotal ?? hitsSum;
       const openingAvg=openingLegend ? (openingTotal/openingLegend).toFixed(1) : "—";
       const totalLegend=d.hits.length;
       const totalAvg=totalLegend ? (total/totalLegend).toFixed(1) : "—";
