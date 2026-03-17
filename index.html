@@ -878,7 +878,7 @@ async function loadHistory(){
       const hitsSum=(d.hits||[]).reduce((a,b)=>a+b,0);
       const current=d.currentStreak||0;
       const total=hitsSum+current;
-      const openingLegend=d.openingHits.length;
+      const openingLegend=(d.openingHits && d.openingHits.length) ? d.openingHits.length : (d.hits.length);
       const openingTotal = d.openingTotal ?? hitsSum;
       const openingAvg=openingLegend ? (openingTotal/openingLegend).toFixed(1) : "—";
       const totalLegend=d.hits.length;
