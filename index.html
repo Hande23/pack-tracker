@@ -882,14 +882,17 @@ async function loadHistory(){
     const openingTotal = d.openingTotal ?? hitsSum;
 
     /* opening legendary sayısını gerçek opening pack'e göre hesapla */
-    let sum=0;
-    let openingLegend=0;
-    (d.hits||[]).forEach(h=>{
-      if(sum + h <= openingTotal){
-        openingLegend++;
-        sum+=h;
+    let sum = 0;
+    let openingLegend = 0;
+
+    for (const h of (d.hits || [])) {
+      sum += h;
+      if (sum <= openingTotal) {
+      openingLegend++;
+      } else {
+      break;
       }
-    });
+    }
 
     const openingAvg=openingLegend ? (openingTotal/openingLegend).toFixed(1) : "—";
       const totalLegend=d.hits.length;
