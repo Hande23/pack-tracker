@@ -886,12 +886,9 @@ async function loadHistory(){
     let openingLegend = 0;
 
     for (const h of (d.hits || [])) {
+      if (sum + h > openingTotal) break;
       sum += h;
-      if (sum <= openingTotal) {
       openingLegend++;
-      } else {
-      break;
-      }
     }
 
     const openingAvg=openingLegend ? (openingTotal/openingLegend).toFixed(1) : "—";
