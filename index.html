@@ -761,7 +761,13 @@ async function startOpening(){
   document.getElementById("sessionTitle").innerText=player+" — "+expansion;
 
   const ref=await addDoc(collection(db,"sessions"),{
-    player,expansion,date,hits:[],openingHits:[],currentStreak:0
+    player,
+    expansion,
+    date,
+    hits:[],
+    openingHits:[],
+    currentStreak:0,
+    openingClosed:false
   });
   currentDoc=ref.id;
   loadExpansions();
@@ -828,6 +834,17 @@ async function saveSession(){
   });
   loadHistory();
   await showAlert("Progress saved");
+}
+async function finishOpening(){
+  if(!currentDoc) return;
+  const result = await showConfirm(
+    "Finish Opening?\n\nYou won't be able to add Opening packs afterwards."
+  );
+  if(!result) return;
+  await updateDoc(doc(db,"sessions",currentDoc),{
+    openingClosed:true
+  });
+  await showAlert("Opening closed successfully");
 }
 
 /* ── HISTORY ── */
@@ -1000,6 +1017,7 @@ window.deletePlayer=deletePlayer;
 window.showNew=showNew;
 window.showContinue=showContinue;
 window.saveSession=saveSession;
+window.finishOpening=finishOpening;
 window.exportData=exportData;
 window.importData=importData;
 window.cancelOpening=cancelOpening;
