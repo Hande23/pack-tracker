@@ -831,7 +831,12 @@ async function saveSession(){
   if(!currentDoc) return;
   const snapshot=await getDocs(collection(db,"sessions"));
   let openingTotalValue=totalPacks;
-  snapshot.forEach(docu=>{
+
+snapshot.forEach(docu=>{
+  if(docu.id===currentDoc){
+
+    const d = docu.data();
+
     if(d.openingTotal){
       openingTotalValue=d.openingTotal;
     }
@@ -839,6 +844,7 @@ async function saveSession(){
     if(isOpeningMode){
       openingTotalValue=totalPacks;
     }
+
   }
 });
   await updateDoc(doc(db,"sessions",currentDoc),{
