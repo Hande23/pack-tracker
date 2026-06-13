@@ -873,7 +873,14 @@ async function loadHistory(){
   const snapshot=await getDocs(collection(db,"sessions"));
   let data=[];
   snapshot.forEach(d=>data.push({...d.data(),id:d.id}));
-  data.sort((a,b)=>new Date(b.date)-new Date(a.date));
+  data.sort((a,b)=>{
+
+  if(a.expansion==="Standard") return -1;
+  if(b.expansion==="Standard") return 1;
+
+  return new Date(b.date)-new Date(a.date);
+
+});
 
   let groups={};
   data.forEach(d=>{
