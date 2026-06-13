@@ -256,6 +256,30 @@ button {
   border-bottom-width: 1px;
 }
 
+/* Special: finish opening — magenta 3D */
+.btn-finish {
+  background: linear-gradient(180deg, #d86be8 0%, #b84ac8 40%, #7d2c90 100%);
+  color: #ffffff;
+  padding: 12px 20px;
+  box-shadow:
+    0 1px 0 rgba(255,180,255,0.35) inset,
+    0 -2px 0 rgba(0,0,0,0.4) inset,
+    0 4px 12px rgba(0,0,0,0.5),
+    0 2px 8px rgba(184,74,200,0.35);
+  border-bottom: 3px solid #5b1f68;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.4);
+}
+
+.btn-finish:hover {
+  background: linear-gradient(180deg, #e67cf2 0%, #c65ad6 40%, #8f39a2 100%);
+  transform: translateY(-1px);
+}
+
+.btn-finish:active {
+  transform: translateY(2px);
+  border-bottom-width: 1px;
+}
+
 /* ── INPUTS / SELECTS ── */
 select, input[type="text"], input[type="date"] {
   background: rgba(0,0,0,0.35);
@@ -632,7 +656,7 @@ select option { background: #1c1208; color: var(--text); }
     </div>
     <div style="margin-top:6px;">
       <button class="btn-save" onclick="saveSession()">💾 Save</button>
-      <button class="btn-secondary" onclick="finishOpening()">🏁 Finish Opening</button>
+      <button class="btn-finish" onclick="finishOpening()">🏁 Finish Opening</button>
       <br>
       <button class="btn-secondary" onclick="undoPack()">↩ Undo</button>
       <button class="btn-danger" onclick="cancelOpening()">✕ Cancel</button>
