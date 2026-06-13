@@ -678,6 +678,7 @@ let currentStreak=0;
 let hits=[];
 let openingHits=[];
 let currentDoc=null;
+let isOpeningMode=false;
 
 /* ── BANNER COLORS ── */
 const BANNER_PALETTE=[
@@ -785,6 +786,9 @@ async function continueOpening(){
       currentDoc=docu.id;
       hits=d.hits||[]; openingHits=d.openingHits||[];
       currentStreak=d.currentStreak||0;
+      
+      isOpeningMode = !d.openingClosed;
+      
       totalPacks=hits.reduce((a,b)=>a+b,0)+currentStreak;
       document.getElementById("sessionCard").style.display="block";
       document.getElementById("sessionTitle").innerText=d.player+" — "+d.expansion;
@@ -807,7 +811,11 @@ function cancelOpening(){
 
 async function legendary(){
   hits.push(currentStreak);
-  openingHits.push(currentStreak);
+  
+  if(isOpeningMode){
+    openingHits.push(currentStreak);
+  }
+  
   currentStreak=0;
   updateCounter();
 }
@@ -824,11 +832,15 @@ async function saveSession(){
   const snapshot=await getDocs(collection(db,"sessions"));
   let openingTotalValue=totalPacks;
   snapshot.forEach(docu=>{
-    if(docu.id===currentDoc){
-      const d=docu.data();
-      if(d.openingTotal) openingTotalValue=d.openingTotal;
+    if(d.openingTotal){
+      openingTotalValue=d.openingTotal;
     }
-  });
+
+    if(isOpeningMode){
+      openingTotalValue=totalPacks;
+    }
+  }
+});
   await updateDoc(doc(db,"sessions",currentDoc),{
     hits, openingHits, currentStreak, openingTotal:openingTotalValue
   });
