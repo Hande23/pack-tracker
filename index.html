@@ -1012,13 +1012,44 @@ async function loadExpansions(){
   select.innerHTML="";
   const snapshot=await getDocs(collection(db,"sessions"));
   let expansions=[];
-  snapshot.forEach(doc=>{ const d=doc.data(); expansions.push(d.expansion); });
-  expansions=[...new Set(expansions)].reverse();
-  expansions.forEach(e=>{
-    const o=document.createElement("option"); o.value=e; o.text=e; select.appendChild(o);
-    const o2=document.createElement("option"); o2.value=e; dataList.appendChild(o2);
+
+  snapshot.forEach(doc=>{
+    const d=doc.data();
+  
+    expansions.push({
+      expansion:d.expansion,
+      date:d.date
+    });
   });
-}
+  
+  const uniqueExpansions = [];
+  
+  expansions.forEach(e=>{
+    if(!uniqueExpansions.find(x=>x.expansion===e.expansion)){
+      uniqueExpansions.push(e);
+    }
+  });
+  
+  uniqueExpansions.sort((a,b)=>{
+  
+    if(a.expansion==="Standard") return -1;
+    if(b.expansion==="Standard") return 1;
+  
+    return new Date(b.date)-new Date(a.date);
+  
+  });
+  uniqueExpansions.forEach(e=>{
+
+  const o=document.createElement("option");
+  o.value=e.expansion;
+  o.text=e.expansion;
+  select.appendChild(o);
+
+  const o2=document.createElement("option");
+  o2.value=e.expansion;
+  dataList.appendChild(o2);
+
+});
 
 /* ── EXPORT / IMPORT ── */
 async function exportData(){
