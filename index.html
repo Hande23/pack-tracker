@@ -866,8 +866,8 @@ snapshot.forEach(docu=>{
       openingTotalValue=d.openingTotal;
     }
 
-    if(isOpeningMode){
-      openingTotalValue=totalPacks;
+    if(d.openingClosed === false){
+    openingTotalValue = totalPacks;
     }
 
   }
