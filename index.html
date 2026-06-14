@@ -279,6 +279,17 @@ button {
   transform: translateY(2px);
   border-bottom-width: 1px;
 }
+  
+.btn-finish:disabled {
+  opacity: 0.55;
+  filter: grayscale(35%);
+  cursor: default;
+}
+
+.btn-finish:disabled:hover {
+  background: linear-gradient(180deg, #5f8fff 0%, #3d6fe8 40%, #2748a8 100%);
+  transform: none;
+}
 
 /* ── INPUTS / SELECTS ── */
 select, input[type="text"], input[type="date"] {
