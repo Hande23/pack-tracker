@@ -915,6 +915,12 @@ async function finishOpening(){
   await updateDoc(doc(db,"sessions",currentDoc),{
     openingClosed:true
   });
+  
+  const finishBtn = document.getElementById("finishBtn");
+
+  finishBtn.innerText = "🔒 Opening Closed";
+  finishBtn.disabled = true;
+  finishBtn.onclick = null;  
   await showAlert("Opening closed successfully");
 }
 
