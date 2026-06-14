@@ -812,7 +812,7 @@ async function continueOpening(){
       hits=d.hits||[]; openingHits=d.openingHits||[];
       currentStreak=d.currentStreak||0;
       
-      isOpeningMode = !d.openingClosed;
+      isOpeningMode = d.openingClosed === false;
       
       totalPacks=hits.reduce((a,b)=>a+b,0)+currentStreak;
       document.getElementById("sessionCard").style.display="block";
