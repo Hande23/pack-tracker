@@ -819,10 +819,12 @@ async function continueOpening(){
       if(d.openingClosed === false){
         finishBtn.innerText = "🏁 Finish Opening";
         finishBtn.disabled = false;
+        finishBtn.onclick = finishOpening;
       }
       else{
         finishBtn.innerText = "🔒 Opening Closed";
         finishBtn.disabled = true;
+        finishBtn.onclick = null;
       }
                  
       totalPacks=hits.reduce((a,b)=>a+b,0)+currentStreak;
