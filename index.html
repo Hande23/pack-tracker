@@ -814,15 +814,7 @@ async function continueOpening(){
       
       isOpeningMode = d.openingClosed === false;
       
-      console.log(
-        "Continue:",
-        d.expansion,
-        "openingClosed=",
-        d.openingClosed,
-        "isOpeningMode=",
-        isOpeningMode
-      );
-      
+           
       totalPacks=hits.reduce((a,b)=>a+b,0)+currentStreak;
       document.getElementById("sessionCard").style.display="block";
       document.getElementById("sessionTitle").innerText=d.player+" — "+d.expansion;
@@ -845,10 +837,6 @@ function cancelOpening(){
 
 async function legendary(){
 
-  console.log(
-    "Legendary pressed. isOpeningMode=",
-    isOpeningMode
-  );
   
   hits.push(currentStreak);
   
@@ -888,13 +876,6 @@ snapshot.forEach(docu=>{
   }
 });
 
-  console.log(
-    "SAVE",
-    "openingTotalValue=",
-    openingTotalValue,
-    "totalPacks=",
-    totalPacks
-  );
   
   await updateDoc(doc(db,"sessions",currentDoc),{
     hits, openingHits, currentStreak, openingTotal:openingTotalValue
