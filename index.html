@@ -887,6 +887,15 @@ snapshot.forEach(docu=>{
 
   }
 });
+
+  console.log(
+    "SAVE",
+    "openingTotalValue=",
+    openingTotalValue,
+    "totalPacks=",
+    totalPacks
+  );
+  
   await updateDoc(doc(db,"sessions",currentDoc),{
     hits, openingHits, currentStreak, openingTotal:openingTotalValue
   });
