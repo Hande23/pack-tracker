@@ -656,7 +656,7 @@ select option { background: #1c1208; color: var(--text); }
     </div>
     <div style="margin-top:6px;">
       <button class="btn-save" onclick="saveSession()">💾 Save</button>
-      <button class="btn-finish" onclick="finishOpening()">🏁 Finish Opening</button>
+      <button id="finishBtn" class="btn-finish" onclick="finishOpening()">🏁 Finish Opening</button>
       <br>
       <button class="btn-secondary" onclick="undoPack()">↩ Undo</button>
       <button class="btn-danger" onclick="cancelOpening()">✕ Cancel</button>
@@ -813,8 +813,18 @@ async function continueOpening(){
       currentStreak=d.currentStreak||0;
       
       isOpeningMode = d.openingClosed === false;
-      
-           
+
+      const finishBtn = document.getElementById("finishBtn");
+
+      if(d.openingClosed === false){
+        finishBtn.innerText = "🏁 Finish Opening";
+        finishBtn.disabled = false;
+      }
+      else{
+        finishBtn.innerText = "🔒 Opening Closed";
+        finishBtn.disabled = true;
+      }
+                 
       totalPacks=hits.reduce((a,b)=>a+b,0)+currentStreak;
       document.getElementById("sessionCard").style.display="block";
       document.getElementById("sessionTitle").innerText=d.player+" — "+d.expansion;
