@@ -1121,16 +1121,21 @@ async function importData(event){
       continue;
     }
   
-    await addDoc(collection(db,"sessions"),{
+    const sessionData = {
       player:d.player,
       expansion:d.expansion,
       date:d.date,
       hits:d.hits||[],
       openingHits:d.openingHits||[],
       currentStreak:d.currentStreak||0,
-      openingTotal:d.openingTotal||0,
-      openingClosed:d.openingClosed
-    });
+      openingTotal:d.openingTotal||0
+    };
+
+if(d.openingClosed !== undefined){
+  sessionData.openingClosed = d.openingClosed;
+}
+
+await addDoc(collection(db,"sessions"), sessionData);
   
     added++;
   }
