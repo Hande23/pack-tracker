@@ -1101,15 +1101,43 @@ async function importData(event){
   const file=event.target.files[0];
   if(!file) return;
   const data=JSON.parse(await file.text());
+  let added = 0;
+  let skipped = 0;
+  
+  const snapshot = await getDocs(collection(db,"sessions"));
+  const existing = [];
+  
+  snapshot.forEach(docu=>{
+    const s = docu.data();
+    existing.push(`${s.player}|${s.expansion}`);
+  });
+  
   for(const d of data){
+  
+    const key = `${d.player}|${d.expansion}`;
+  
+    if(existing.includes(key)){
+      skipped++;
+      continue;
+    }
+  
     await addDoc(collection(db,"sessions"),{
-      player:d.player, expansion:d.expansion, date:d.date,
-      hits:d.hits||[], openingHits:d.openingHits||[],
-      currentStreak:d.currentStreak||0, openingTotal:d.openingTotal||0
+      player:d.player,
+      expansion:d.expansion,
+      date:d.date,
+      hits:d.hits||[],
+      openingHits:d.openingHits||[],
+      currentStreak:d.currentStreak||0,
+      openingTotal:d.openingTotal||0,
+      openingClosed:d.openingClosed
     });
+  
+    added++;
   }
   loadHistory(); loadExpansions();
-  await showAlert("Import completed");
+  await showAlert(
+    `Import completed\n\nAdded: ${added}\nSkipped: ${skipped}`
+  );
 }
 
 async function deletePlayer(id){
