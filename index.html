@@ -954,7 +954,25 @@ async function loadHistory(){
     groups[key].push(d);
   });
 
-  Object.keys(groups).forEach(key=>{
+  const groupKeys = Object.keys(groups);
+
+groupKeys.sort((a, b) => {
+  const dateA = groups[a][0].date || "";
+  const dateB = groups[b][0].date || "";
+
+  if (a.startsWith("Standard (")) return 1;
+  if (b.startsWith("Standard (")) return -1;
+
+  return new Date(dateB) - new Date(dateA);
+});
+
+const standardKey = groupKeys.find(key => key.startsWith("Standard ("));
+
+if (standardKey) {
+  groupKeys.splice(groupKeys.indexOf(standardKey), 1);
+  groupKeys.splice(Math.min(1, groupKeys.length), 0, standardKey);
+}
+  groupKeys.forEach(key=>{
     const [expName, dateStr] = key.includes("(")
       ? [key.split(" (")[0], key.split(" (")[1].replace(")","")]
       : [key, ""];
