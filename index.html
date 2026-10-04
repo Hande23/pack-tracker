@@ -793,6 +793,12 @@ async function startOpening(){
   if(wrongDate||existsPlayer){ await showAlert("This session already exists"); return; }
 
   totalPacks=0; currentStreak=0; hits=[]; openingHits=[];
+  isOpeningMode = true;
+
+  const finishBtn = document.getElementById("finishBtn");
+  finishBtn.innerText = "🏁 Finish Opening";
+  finishBtn.disabled = false;
+  finishBtn.onclick = finishOpening;
 
   document.getElementById("sessionCard").style.display="block";
   document.getElementById("sessionTitle").innerText=player+" — "+expansion;
@@ -1065,13 +1071,20 @@ async function loadExpansions(){
   });
   
   uniqueExpansions.sort((a,b)=>{
-  
-    if(a.expansion==="Standard") return -1;
-    if(b.expansion==="Standard") return 1;
+    if(a.expansion==="Standard") return 1;
+    if(b.expansion==="Standard") return -1;
   
     return new Date(b.date)-new Date(a.date);
-  
   });
+  
+  const standardIndex = uniqueExpansions.findIndex(
+    e => e.expansion === "Standard"
+  );
+  
+  if(standardIndex !== -1){
+    const [standard] = uniqueExpansions.splice(standardIndex, 1);
+    uniqueExpansions.splice(Math.min(1, uniqueExpansions.length), 0, standard);
+  }
   uniqueExpansions.forEach(e=>{
 
   const o=document.createElement("option");
